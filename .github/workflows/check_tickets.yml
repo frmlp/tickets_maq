@@ -14,6 +14,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -36,8 +37,10 @@ jobs:
         run: python script.py
 
       - name: Commit and push changes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add places.json
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Update places.json [skip ci]" && git push)
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Update places.json [skip ci]" && git push origin main)
